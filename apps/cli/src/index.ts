@@ -2,12 +2,24 @@ import { Command } from "commander";
 import { runScenario, summarize } from "@diffsense/harness";
 import { exactMatch } from "@diffsense/evaluators";
 import { openaiRunner } from "@diffsense/runners";
+import { mockRunner } from "@diffsense/runners-mock";
 import { toy } from "@diffsense/datasets-toy";
 import { core } from "@diffsense/datasets-core";
 import { writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import crypto from "node:crypto";
-import type { RunManifest, ScenarioMetric } from "@diffsense/core";
+import type { RunConfig, RunManifest, ScenarioMetric } from '@diffsense/core';
+
+function resolveRunner(id: string) {
+  if (id.startsWith("mock:")) {
+    const mode = id.split(":")[1] as Parameters<typeof mockRunner>[0];
+    return mockRunner(mode);
+  }
+  if (id.startsWith("openai:")) {
+    return openaiRunner;
+  }
+  throw new Error(`Unknown runner '${id}'. Try 'mock:pass' | 'mock:fail' | 'mock:echo' | 'mock:random'.`);
+}
 
 const program = new Command();
 program
@@ -19,19 +31,22 @@ program
   .action(async (opts) => {
     const runId = new Date().toISOString().replace(/[-:TZ.]/g, "").slice(0, 12);
     const scenarios = opts.suite === "core" ? core : toy;
+
+    const runnerFn = resolveRunner(opts.runner);
+    const cfg: RunConfig = { runner: opts.runner };
+
     const results: ScenarioMetric[] = [];
     for (const s of scenarios) {
-      const r = await runScenario(s, { runner: opts.runner }, openaiRunner, [exactMatch]);
+      const r = await runScenario(s, cfg, runnerFn, [exactMatch]);
       results.push(r);
       console.log(`${s.id}: ${r.ok ? "PASS" : "FAIL"}`);
     }
-    const agg = summarize(runId, results);
 
+    const agg = summarize(runId, results);
     const outDir = join(process.cwd(), opts.out, runId);
     await mkdir(outDir, { recursive: true });
     await writeFile(join(outDir, "metrics.json"), JSON.stringify(agg, null, 2));
-    const per = results.map(r => ({ ...r }));
-    await writeFile(join(outDir, "scenarios.json"), JSON.stringify(per, null, 2));
+    await writeFile(join(outDir, "scenarios.json"), JSON.stringify(results, null, 2));
 
     const manifest: RunManifest = {
       schemaVersion: "1.0",

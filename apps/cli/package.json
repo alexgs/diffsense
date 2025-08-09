@@ -28,6 +28,7 @@
     "@diffsense/evaluators": "*",
     "@diffsense/harness": "*",
     "@diffsense/runners": "*",
+    "@diffsense/runners-mock": "*",
     "commander": "^12.1.0",
     "fast-glob": "^3.3.2"
   },
