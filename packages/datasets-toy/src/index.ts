@@ -1,6 +1,6 @@
 import type { Scenario } from '@diffsense/core';
 
-const toy: Scenario[] = [
+export const toy: Scenario[] = [
   {
     id: 'toy-1',
     track: 'diff',

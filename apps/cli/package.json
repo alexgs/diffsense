@@ -1,0 +1,38 @@
+{
+  "name": "@diffsense/cli",
+  "version": "0.0.0",
+  "author": {
+    "email": "alex.nebula99@gmail.com",
+    "name": "Alex Gates-Shannon"
+  },
+  "bin": {
+    "diffsense": "dist/index.js"
+  },
+  "license": "BSD-3-Clause",
+  "packageManager": "npm@11.1.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexgs/diffsense.git"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "type": "module",
+  "dependencies": {
+    "@diffsense/core": "*",
+    "@diffsense/datasets-core": "*",
+    "@diffsense/datasets-toy": "*",
+    "@diffsense/evaluators": "*",
+    "@diffsense/harness": "*",
+    "@diffsense/runners": "*",
+    "commander": "^12.1.0",
+    "fast-glob": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.1"
+  }
+}
