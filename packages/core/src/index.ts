@@ -4,6 +4,8 @@ export interface AggregateMetrics {
   totals: { passed: number; failed: number; total: number };
 }
 
+export type EvaluationMode = "patch" | "diff";
+
 export interface Evaluator {
   evaluate(s: Scenario, output: unknown): Promise<Record<string, number | string | boolean>>;
   key: string;
@@ -31,12 +33,12 @@ export interface RunManifest {
 
 export interface Scenario {
   id: string;
+  evaluationMode: EvaluationMode;
   expected?: Record<string, unknown>;
   inputs?: Record<string, unknown>;
   prompt: string;
   repoFixture?: string;
   tags?: string[];
-  track: Track;
 }
 
 export interface ScenarioMetric {
@@ -45,5 +47,3 @@ export interface ScenarioMetric {
   ok: boolean;
   runner: string;
 }
-
-export type Track = "patch" | "diff";
