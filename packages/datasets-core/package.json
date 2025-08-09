@@ -1,0 +1,22 @@
+{
+  "name": "@diffsense/datasets-core",
+  "version": "0.0.0",
+  "author": {
+    "email": "alex.nebula99@gmail.com",
+    "name": "Alex Gates-Shannon"
+  },
+  "exports": { ".": "./dist/index.js" },
+  "keywords": ["diffsense-scenarios"],
+  "license": "BSD-3-Clause",
+  "packageManager": "npm@11.1.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexgs/diffsense.git"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "type": "module"
+}
