@@ -1,0 +1,45 @@
+{
+  "name": "diffsense",
+  "version": "0.0.0",
+  "description": "Real-world software engineering benchmark for LLMs",
+  "author": {
+    "email": "alex.nebula99@gmail.com",
+    "name": "Alex Gates-Shannon"
+  },
+  "license": "BSD-3-Clause",
+  "packageManager": "npm@11.1.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexgs/diffsense.git"
+  },
+  "scripts": {
+    "benchmark:core": "npm run -w @diffsense/cli run -- --suite core --out dist-run",
+    "benchmark:toy": "npm run -w @diffsense/cli run -- --suite toy --out dist-run",
+    "build": "npm run -ws build",
+    "dev": "npm run -ws --if-present dev",
+    "lint": "npm run -ws lint",
+    "pack:run": "node tools/pack-run.cjs dist-run diffsense-${npm_package_version}-run.tar.zst",
+    "site:build": "npm run -w @diffsense/site-astro build",
+    "test": "npm run -ws test",
+    "typecheck": "npm run -ws typecheck"
+  },
+  "volta": {
+    "node": "22.14.0",
+    "npm": "11.1.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/node": "^24.2.1",
+    "changesets": "^1.0.2",
+    "eslint": "^9.33.0",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "zod": "^4.0.17"
+  }
+}

@@ -1,0 +1,56 @@
+name: benchmark-release
+on:
+  workflow_dispatch:
+  push:
+    tags: ["run-*"] # tag to trigger a public run
+
+jobs:
+  run-bench:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    # for releases
+      packages: read     # for private dataset install (optional)
+    steps:
+      - uses: 'actions/checkout@v4'
+        with: { fetch-depth: 0 }
+      - uses: 'actions/setup-node@v4'
+        with: { node-version: 20, cache: 'npm' }
+
+      # (optional) Auth to GH Packages for private datasets
+      - name: Auth GH Packages
+        if: secrets.GH_PACKAGES_TOKEN != ''
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGES_TOKEN }}" >> ~/.npmrc
+          echo "@diffsense-private:registry=https://npm.pkg.github.com" >> ~/.npmrc
+
+      - run: npm ci
+      - run: npm run build
+
+      # run full suite (public + private if installed)
+      - run: npm run benchmark:core
+
+      # pack
+      - run: npm run pack:run
+
+      # upload to Cloudflare R2 (S3 compatible)
+      - name: Upload to R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: diffsense-results
+        run: |
+          FILE=$(ls diffsense-*-run.tar.zst)
+          aws s3 cp "$FILE" "s3://${R2_BUCKET}/runs/${GITHUB_REF_NAME}/${FILE}" \
+            --endpoint-url="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+
+      # create/attach Release
+      - name: Create GitHub Release (attach tarball)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "DiffSense ${github.ref_name}"
+          files: |
+            diffsense-*-run.tar.zst
+            apps/cli/dist-run/*/*/manifest.json
+            apps/cli/dist-run/*/*/metrics.json
