@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["node"],
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@diffsense/core": ["packages/core/src/index.ts"],
+      "@diffsense/harness": ["packages/harness/src/index.ts"],
+      "@diffsense/evaluators": ["packages/evaluators/src/index.ts"],
+      "@diffsense/runners": ["packages/runners/src/index.ts"],
+      "@diffsense/datasets-core": ["packages/datasets-core/src/index.ts"],
+      "@diffsense/datasets-toy": ["packages/datasets-toy/src/index.ts"]
+    }
+  }
+}
