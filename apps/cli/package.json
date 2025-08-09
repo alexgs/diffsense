@@ -9,7 +9,6 @@
     "diffsense": "dist/index.js"
   },
   "license": "BSD-3-Clause",
-  "packageManager": "npm@11.1.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -32,7 +31,8 @@
     "commander": "^12.1.0",
     "fast-glob": "^3.3.2"
   },
-  "devDependencies": {
-    "@types/node": "^24.2.1"
+  "volta": {
+    "node": "22.18.0",
+    "npm": "11.5.2"
   }
 }
