@@ -1,0 +1,25 @@
+{
+  "name": "diffsense",
+  "version": "0.0.0",
+  "description": "Real-world software engineering benchmark for LLMs",
+  "author": {
+    "email": "alex.nebula99@gmail.com",
+    "name": "Alex Gates-Shannon"
+  },
+  "license": "BSD-3-Clause",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexgs/diffsense.git"
+  },
+  "scripts": {
+    "dev": "tsx minibench.ts --suite toy --runner mock:echo --out runs/dev/metrics.json",
+    "run": "tsx minibench.ts",
+    "check:repeatability": "node -e \"const fs=require('fs'); const a=fs.readFileSync('runs/dev/metrics.json'); const b=fs.readFileSync('runs/dev/metrics.json'); if(Buffer.compare(a,b)!==0)process.exit(1)\""
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.1",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}
