@@ -35,6 +35,7 @@ export interface Scenario {
   id: string;
   evaluationMode: EvaluationMode;
   expected?: Record<string, unknown>;
+  includeFormatHint?: boolean; // default true
   inputs?: Record<string, unknown>;
   prompt: string;
   repoFixture?: string;
