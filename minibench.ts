@@ -48,11 +48,11 @@ const toySuite: Scenario[] = [
   {
     id: "toy-2",
     prompt: "Return exactly: 42",
-    expected: "42",
+    expected: "0042", // Intentionally wrong to demonstrate failure
   },
 ];
 
-function loadSuite(name: string): Scenario[] {
+export function loadSuite(name: string): Scenario[] {
   if (name === "toy") {
     return toySuite;
   }
@@ -76,7 +76,7 @@ const exactMatchEvaluator: Evaluator = {
 };
 
 // ---------- Runners (purely deterministic mocks) ----------
-function makeRunner(kind: string): Runner {
+export function makeRunner(kind: string): Runner {
   if (kind === "mock:pass") {
     return {
       name: kind,
@@ -99,7 +99,7 @@ function makeRunner(kind: string): Runner {
 }
 
 // ---------- Harness (Orchestrator) ----------
-async function runSuite(args: {
+export async function runSuite(args: {
   suite: string;
   runnerName: string;
 }): Promise<RunResult> {
