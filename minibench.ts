@@ -1,3 +1,7 @@
+import 'dotenv/config';
+
+import OpenAI from 'openai';
+
 // ---------- Types ----------
 export interface Evaluator {
   key: string;
@@ -77,6 +81,32 @@ const exactMatchEvaluator: Evaluator = {
 
 // ---------- Runners (purely deterministic mocks) ----------
 export function makeRunner(kind: string): Runner {
+  if (kind === "openai:chat") {
+    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+    return {
+      name: kind,
+      run: async (prompt, scenario) => {
+        // Deterministic, “dumb” instruction so exact-match can pass.
+        // We’re intentionally NOT templating or adding options yet.
+        const instructions =
+          "You are a tool that extracts the exact text following 'Return exactly:' from the user input. " +
+          "Return ONLY that text with no quotes, punctuation, or explanation. " +
+          "If the user input does not contain that phrase, return an empty string.";
+
+        const resp = await client.responses.create({
+          model: "gpt-4o-mini",        // fast/cheap is fine for this; change later if you want
+          input: prompt,               // the same prompt your mocks see
+          instructions,                // “system” style guidance for determinism
+          temperature: 0,              // reduce variance for exact-match checks
+          // max_output_tokens: 64,    // optional: keep responses tiny
+        });
+
+        // Simple text—keeps our harness contract unchanged
+        return resp.output_text ?? "";
+      },
+    };
+  }
   if (kind === "mock:pass") {
     return {
       name: kind,
