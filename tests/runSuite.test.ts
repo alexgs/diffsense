@@ -4,6 +4,14 @@ import { runSuite } from "../minibench";
 
 // Helpers
 const expectTotals = (r: Awaited<ReturnType<typeof runSuite>>) => r.totals;
+const hasKey = !!process.env.OPENAI_API_KEY;
+
+test('openai:chat → behaves like echo for toy suite', { skip: !hasKey }, async () => {
+  const r = await runSuite({ suite: "toy", runnerName: "openai:chat" });
+  assert.equal(r.totals.scored, 2);
+  // Expect 2/2 pass *if* your toy suite still expects literal matches.
+  assert.equal(r.totals.passed, 1);
+});
 
 test("mock:pass → all pass", async () => {
   const r = await runSuite({ suite: "toy", runnerName: "mock:pass" });
