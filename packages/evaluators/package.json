@@ -1,0 +1,26 @@
+{
+  "name": "@diffsense/evaluators",
+  "version": "0.0.0",
+  "description": "Evaluator functionality for the DiffSense benchmark",
+  "author": {
+    "email": "alex.nebula99@gmail.com",
+    "name": "Alex Gates-Shannon"
+  },
+  "exports": { ".": "./dist/index.js" },
+  "license": "BSD-3-Clause",
+  "main": "dist/index.js",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexgs/diffsense.git"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@diffsense/types": "*"
+  }
+}
