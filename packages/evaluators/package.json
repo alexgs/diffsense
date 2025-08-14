@@ -1,7 +1,7 @@
 {
-  "name": "@diffsense/types",
+  "name": "@diffsense/evaluators",
   "version": "0.0.0",
-  "description": "Core types for the DiffSense benchmark",
+  "description": "Evaluator functionality for the DiffSense benchmark",
   "author": {
     "email": "alex.nebula99@gmail.com",
     "name": "Alex Gates-Shannon"
@@ -9,7 +9,6 @@
   "exports": { ".": "./dist/index.js" },
   "license": "BSD-3-Clause",
   "main": "dist/index.js",
-  "packageManager": "npm@11.1.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -20,5 +19,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "type": "module",
-  "types": "dist/index.d.ts"
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@diffsense/types": "*"
+  }
 }
