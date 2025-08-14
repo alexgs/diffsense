@@ -1,11 +1,11 @@
 import { Evaluation, RunResult, ScenarioResult } from "@diffsense/types";
-import { loadScenario } from "@diffsense/scenarios";
+import { loadSuite } from "@diffsense/test-suites";
 import { makeRunner } from "@diffsense/runners";
 import { exactMatchEvaluator, codefixEvaluator } from "@diffsense/evaluators";
 
-export async function runScenario(args: { suite: string; runnerName: string }): Promise<RunResult> {
+export async function runSuite(args: { suite: string; runnerName: string }): Promise<RunResult> {
   const startedAt = new Date().toISOString();
-  const suite = loadScenario(args.suite);
+  const suite = loadSuite(args.suite);
   const runner = makeRunner(args.runnerName);
 
   const results: ScenarioResult[] = [];

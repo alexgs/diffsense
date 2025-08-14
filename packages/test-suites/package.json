@@ -1,5 +1,5 @@
 {
-  "name": "@diffsense/scenarios",
+  "name": "@diffsense/test-suites",
   "version": "0.0.0",
   "exports": "./dist/index.js",
   "scripts": { "build": "tsc -p tsconfig.json" },

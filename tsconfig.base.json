@@ -13,7 +13,7 @@
       "@diffsense/evaluators": ["packages/evaluators/src/index.ts"],
       "@diffsense/harness": ["packages/harness/src/index.ts"],
       "@diffsense/runners": ["packages/runners/src/index.ts"],
-      "@diffsense/scenarios": ["packages/scenarios/src/index.ts"],
+      "@diffsense/test-suites": ["packages/test-suites/src/index.ts"],
       "@diffsense/types": ["packages/types/src/index.ts"],
     }
   }
