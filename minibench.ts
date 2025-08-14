@@ -42,7 +42,20 @@ export type ScenarioResult = {
   evaluations: Evaluation[];
 };
 
-// ---------- Toy suite ----------
+// ---------- Suites ----------
+
+export function loadSuite(name: string): Scenario[] {
+  if (name === "toy") {
+    return toySuite;
+  }
+  if (name === "codefix-toy") {
+    return codefixSuite;
+  }
+
+  throw new Error(`Unknown suite: ${name}`);
+}
+
+// Toy Suite
 const toySuite: Scenario[] = [
   {
     id: "toy-1",
@@ -56,12 +69,34 @@ const toySuite: Scenario[] = [
   },
 ];
 
-export function loadSuite(name: string): Scenario[] {
-  if (name === "toy") {
-    return toySuite;
-  }
-  throw new Error(`Unknown suite: ${name}`);
-}
+// Codefix Suite
+type CodefixTest = { args: [number, number]; expect: number };
+
+type CodefixScenario = Scenario & {
+  kind: "codefix";
+  source: string;           // the buggy code
+  entry: "add";             // exported function name to test
+  tests: CodefixTest[];     // tiny truth table
+};
+
+const codefixSuite: CodefixScenario[] = [
+  {
+    id: "codefix-add-1",
+    kind: "codefix",
+    prompt:
+      "You will be given a small JS function and a test table. " +
+      "Return strict JSON with keys: explanation (string), patch { find, replace }. " +
+      "Do not include markdown or extra keys.",
+    expected: "", // not used for codefix evaluation
+    source: `function add(a, b) { return 3; }`,
+    entry: "add",
+    tests: [
+      { args: [1, 1], expect: 2 },
+      { args: [2, 1], expect: 3 },
+      { args: [2, 2], expect: 4 },
+    ],
+  },
+];
 
 // ---------- Evaluator(s) ----------
 const exactMatchEvaluator: Evaluator = {
@@ -76,6 +111,61 @@ const exactMatchEvaluator: Evaluator = {
       score: pass ? 1 : 0,
       details: pass ? undefined : { expected, got: actual },
     };
+  },
+};
+
+const codefixEvaluator = {
+  name: "codefix-patch-applies-and-tests",
+  evaluate(scenario: Scenario, output: string): Evaluation {
+    try {
+      // Only handle codefix scenarios
+      const scn = scenario as any;
+      if (scn.kind !== "codefix") {
+        return { evaluator: this.name, pass: false, score: 0, details: { error: "not-codefix" } };
+      }
+
+      // Parse model (or mock) JSON
+      const parsed = JSON.parse(output);
+      const find = String(parsed?.patch?.find ?? "");
+      const replace = String(parsed?.patch?.replace ?? "");
+      if (!find || !replace) {
+        return { evaluator: this.name, pass: false, score: 0, details: { error: "bad-patch-shape", parsed } };
+      }
+
+      // Apply replacement
+      const patched = scn.source.replace(find, replace);
+      if (patched === scn.source) {
+        return { evaluator: this.name, pass: false, score: 0, details: { error: "no-change" } };
+      }
+
+      // Evaluate the code in a tight scope and extract the entry function
+      // Intentionally minimal; no access to FS/network
+      const entryName = scn.entry;
+      const getFn = new Function(
+        `"use strict"; ${patched}; return typeof ${entryName}==='function' ? ${entryName} : null;`
+      );
+      const fn = getFn();
+      if (typeof fn !== "function") {
+        return { evaluator: this.name, pass: false, score: 0, details: { error: "entry-not-found" } };
+      }
+
+      // Run tiny tests
+      const failures: Array<{ args: any[]; expect: any; got: any }> = [];
+      for (const t of scn.tests as CodefixTest[]) {
+        const got = fn(...t.args);
+        if (got !== t.expect) failures.push({ args: t.args, expect: t.expect, got });
+      }
+
+      const pass = failures.length === 0;
+      return {
+        evaluator: this.name,
+        pass,
+        score: pass ? 1 : 0,
+        details: pass ? undefined : { failures, patched },
+      };
+    } catch (err: any) {
+      return { evaluator: this.name, pass: false, score: 0, details: { error: String(err?.message ?? err) } };
+    }
   },
 };
 
@@ -125,6 +215,22 @@ export function makeRunner(kind: string): Runner {
       run: (prompt) => prompt.replace(/^Return exactly:\s*/i, ""),
     };
   }
+  if (kind === "mock:codefix") {
+    return {
+      name: kind,
+      run: (_prompt, scenario) => {
+        if ((scenario as any).kind === "codefix") {
+          // Perfect fix; explanation is ignored by evaluator for now
+          return JSON.stringify({
+            explanation: "The function returns a constant; replace with a+b.",
+            patch: { find: "return 3;", replace: "return a + b;" }
+          });
+        }
+        // Fallback to echo for non-codefix
+        return String(_prompt).replace(/^Return exactly:\s*/i, "");
+      },
+    };
+  }
   throw new Error(`Unknown runner: ${kind}`);
 }
 
@@ -139,9 +245,16 @@ export async function runSuite(args: {
 
   const results: ScenarioResult[] = [];
   for (const scenario of suite) {
-    const output = await runner.run(scenario.prompt, scenario);
-    const evaluation = exactMatchEvaluator.evaluate(scenario, String(output));
-    results.push({ scenarioId: scenario.id, output: String(output), evaluations: [evaluation] });
+    const output = await runner.run((scenario as any).prompt ?? scenario.prompt, scenario);
+    const evals: Evaluation[] = [];
+
+    if ((scenario as any).kind === "codefix") {
+      evals.push(codefixEvaluator.evaluate(scenario, String(output)));
+    } else {
+      evals.push(exactMatchEvaluator.evaluate(scenario, String(output)));
+    }
+
+    results.push({ scenarioId: scenario.id, output: String(output), evaluations: evals });
   }
 
   const passed = results.filter((r) => r.evaluations[0].pass).length;
