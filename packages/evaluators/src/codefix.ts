@@ -1,6 +1,6 @@
 import { CodefixScenario, Evaluation, Scenario } from '@diffsense/types';
 
-const codefixEvaluator = {
+export const codefixEvaluator = {
   name: "codefix-patch-applies-and-tests",
   evaluate(scenario: Scenario, output: string): Evaluation {
     try {
