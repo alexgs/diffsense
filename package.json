@@ -22,6 +22,10 @@
     "node": "22.18.0",
     "npm": "11.5.2"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "dependencies": {
     "openai": "^5.12.2"
   },
