@@ -26,12 +26,9 @@
     "apps/*",
     "packages/*"
   ],
-  "dependencies": {
-    "openai": "^5.12.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^24.2.1",
-    "dotenv": "^17.2.1",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2"
   }
