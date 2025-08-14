@@ -12,12 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/alexgs/diffsense.git"
   },
-  "scripts": {
-    "check:repeatability": "node -e \"const fs=require('fs'); const a=fs.readFileSync('runs/dev/metrics.json'); const b=fs.readFileSync('runs/dev/metrics.json'); if(Buffer.compare(a,b)!==0)process.exit(1)\"",
-    "dev": "tsx minibench.ts --suite toy --runner mock:echo --out runs/dev/metrics.json",
-    "run": "tsx minibench.ts",
-    "test": "tsx --test \"tests/**/*.test.ts\""
-  },
+  "scripts": {},
   "volta": {
     "node": "22.18.0",
     "npm": "11.5.2"
