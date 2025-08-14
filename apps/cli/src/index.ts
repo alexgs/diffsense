@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { runScenario } from "@diffsense/harness";
+import { runSuite } from "@diffsense/harness";
 
 function parseArg(flag: string, fallback?: string): string | undefined {
   const idx = process.argv.indexOf(flag);
@@ -18,7 +18,7 @@ async function main() {
   }
 
   try {
-    const result = await runScenario({ suite, runnerName: runner });
+    const result = await runSuite({ suite, runnerName: runner });
     const json = JSON.stringify(result, null, 2);
     if (out) {
       const fs = await import("node:fs/promises");

@@ -1,6 +1,6 @@
 import { CodefixScenario } from '@diffsense/types';
 
-export const codefixScenarios: CodefixScenario[] = [
+export const codefixSuite: CodefixScenario[] = [
   // Variant A: Unconstrained (real-world)
   {
     id: "codefix-add-unconstrained",

@@ -1,6 +1,6 @@
 import { Scenario } from '@diffsense/types';
 
-export const toyScenarios: Scenario[] = [
+export const toySuite: Scenario[] = [
   {
     id: "toy-1",
     prompt: "Return exactly: hello world",

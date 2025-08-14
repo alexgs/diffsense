@@ -1,1 +1,1 @@
-export * from "./run-scenario";
+export * from "./run-suite";
