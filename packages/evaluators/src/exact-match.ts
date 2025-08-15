@@ -1,8 +1,8 @@
-import { Evaluation, Evaluator, Scenario } from '@diffsense/types';
+import { LegacyEvaluation, LegacyEvaluator, LegacyScenario } from '@diffsense/types';
 
-export const exactMatchEvaluator: Evaluator = {
+export const exactMatchEvaluator: LegacyEvaluator = {
   key: "exact-match",
-  evaluate(scenario: Scenario, output: string): Evaluation {
+  evaluate(scenario: LegacyScenario, output: string): LegacyEvaluation {
     const actual = (output ?? "").trim();
     const expected = (scenario.expected ?? "").trim();
     const pass = actual === expected;

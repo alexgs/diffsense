@@ -1,14 +1,14 @@
 import "dotenv/config";
 import OpenAI from "openai";
-import { Runner, Scenario } from "@diffsense/types";
+import { LegacyRunner, LegacyScenario } from "@diffsense/types";
 
-export function openaiChatRunner(): Runner {
+export function openaiChatRunner(): LegacyRunner {
   const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   const name = "openai:chat";
 
   return {
     name,
-    run: async (prompt: string, _scenario: Scenario) => {
+    run: async (prompt: string, _scenario: LegacyScenario) => {
       const instructions =
         "You are a tool that extracts the exact text following 'Return exactly:' from the user input. " +
         "Return ONLY that text with no quotes, punctuation, or explanation. " +

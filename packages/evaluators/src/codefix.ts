@@ -1,10 +1,10 @@
-import { CodefixScenario, Evaluation, Scenario } from '@diffsense/types';
+import { LegacyCodefixScenario, LegacyEvaluation, LegacyScenario } from '@diffsense/types';
 
 export const codefixEvaluator = {
   name: "codefix-patch-applies-and-tests",
-  evaluate(scenario: Scenario, output: string): Evaluation {
+  evaluate(scenario: LegacyScenario, output: string): LegacyEvaluation {
     try {
-      const scn = scenario as CodefixScenario;
+      const scn = scenario as LegacyCodefixScenario;
       if (scn.kind !== "codefix") {
         return { evaluator: this.name, pass: false, score: 0, details: { error: "not-codefix" } };
       }

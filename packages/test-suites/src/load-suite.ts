@@ -1,8 +1,8 @@
-import { Scenario } from '@diffsense/types';
+import { LegacyScenario } from '@diffsense/types';
 import { toySuite1 } from './toy-suite-1';
 import { codefixSuite } from './codefix-suite';
 
-export function loadSuite(name: string): Scenario[] {
+export function loadSuite(name: string): LegacyScenario[] {
   if (name === "toy") {
     return toySuite1;
   }

@@ -1,21 +1,22 @@
-import { Evaluation, RunResult, ScenarioResult } from "@diffsense/types";
+import { LegacyEvaluation, LegacyRunResult, LegacyScenarioResult } from "@diffsense/types";
 import { loadSuite } from "@diffsense/test-suites";
 import { makeRunner } from "@diffsense/runners";
 import { exactMatchEvaluator, codefixEvaluator } from "@diffsense/evaluators";
 
-export async function runSuite(args: { suite: string; runnerName: string }): Promise<RunResult> {
+export async function runSuite(args: { suite: string; runnerName: string }): Promise<LegacyRunResult> {
   const startedAt = new Date().toISOString();
   const suite = loadSuite(args.suite);
   const runner = makeRunner(args.runnerName);
 
-  const results: ScenarioResult[] = [];
+  const results: LegacyScenarioResult[] = [];
   for (const scenario of suite) {
     const output = await runner.run((scenario as any).prompt ?? scenario.prompt, scenario);
-    const evals: Evaluation[] = [];
+    const evals: LegacyEvaluation[] = [];
     if ((scenario as any).kind === "codefix") {
       evals.push(codefixEvaluator.evaluate(scenario, String(output)));
     } else {
-      evals.push(exactMatchEvaluator.evaluate(scenario, String(output)));
+      const result = await exactMatchEvaluator.evaluate(scenario, String(output));
+      evals.push(result);
     }
     results.push({ scenarioId: scenario.id, output: String(output), evaluations: evals });
   }

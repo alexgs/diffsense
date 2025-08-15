@@ -1,6 +1,6 @@
-import { CodefixScenario } from '@diffsense/types';
+import { LegacyScenario } from '@diffsense/types';
 
-export const codefixSuite: CodefixScenario[] = [
+export const codefixSuite: LegacyScenario[] = [
   // Variant A: Unconstrained (real-world)
   {
     id: "codefix-add-unconstrained",
@@ -9,14 +9,16 @@ export const codefixSuite: CodefixScenario[] = [
       "Given a small JS function and a test table, return strict JSON ONLY:\n" +
       '{ "explanation": string, "patch": { "find": string, "replace": string } }',
     expected: "",
-    source: `function add(a, b) { return 3; }`,
-    entry: "add",
-    tests: [
-      { args: [1, 1], expect: 2 },
-      { args: [2, 1], expect: 3 },
-      { args: [2, 2], expect: 4 },
-    ],
-    // no constraints: model must locate target itself
+    meta: {
+      source: `function add(a, b) { return 3; }`,
+      entry: "add",
+      tests: [
+        { args: [1, 1], expect: 2 },
+        { args: [2, 1], expect: 3 },
+        { args: [2, 2], expect: 4 },
+      ],
+      // no constraints: model must locate target itself
+    },
   },
 
   // Variant B: Constrained (controlled)
@@ -29,13 +31,15 @@ export const codefixSuite: CodefixScenario[] = [
       "IMPORTANT: patch.find MUST be one of the following EXACT strings (copy verbatim):\n" +
       "1) `return 3;`",
     expected: "",
-    source: `function add(a, b) { return 3; }`,
-    entry: "add",
-    tests: [
-      { args: [1, 1], expect: 2 },
-      { args: [2, 1], expect: 3 },
-      { args: [2, 2], expect: 4 },
-    ],
-    constraints: { allowedFinds: ["return 3;"] }, // ← enforceable by evaluator
+    meta: {
+      source: `function add(a, b) { return 3; }`,
+      entry: "add",
+      tests: [
+        { args: [ 1, 1 ], expect: 2 },
+        { args: [ 2, 1 ], expect: 3 },
+        { args: [ 2, 2 ], expect: 4 },
+      ],
+      constraints: { allowedFinds: ["return 3;"] }, // ← enforceable by evaluator
+    },
   },
 ];

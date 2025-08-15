@@ -1,8 +1,8 @@
-import { Runner } from "@diffsense/types";
+import { LegacyRunner } from "@diffsense/types";
 import { openaiChatRunner } from "./openai-chat";
 import { mockPass, mockFail, mockEcho, mockCodefix } from "./mocks";
 
-export function makeRunner(kind: string): Runner {
+export function makeRunner(kind: string): LegacyRunner {
   if (kind === "openai:chat") return openaiChatRunner();
   if (kind === "mock:pass") return mockPass;
   if (kind === "mock:fail") return mockFail;

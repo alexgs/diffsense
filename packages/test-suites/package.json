@@ -2,7 +2,10 @@
   "name": "@diffsense/test-suites",
   "version": "0.0.0",
   "exports": "./dist/index.js",
-  "scripts": { "build": "tsc -p tsconfig.json" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
   "type": "module",
   "types": "./dist/index.d.ts",
   "dependencies": {

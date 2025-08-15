@@ -1,6 +1,6 @@
-import { Scenario } from '@diffsense/types';
+import { LegacyScenario } from '@diffsense/types';
 
-export const scenarioToySum: Scenario = {
+export const scenarioToySum: LegacyScenario = {
   id: "toy/sum-001",
   kind: "codefix",
   meta: { title: "Fix add(a,b) returns a+b" },
