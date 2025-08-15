@@ -40,9 +40,10 @@ export type Runner = {
 
 export type Scenario = {
   id: string;
-  prompt: string;
   expected: string;
+  kind?: string; // TODO Eventually this should be a required field, I think
   meta?: Record<string, any>;
+  prompt: string;
 };
 
 export type ScenarioResult = {

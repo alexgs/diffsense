@@ -1,10 +1,10 @@
 import { Scenario } from '@diffsense/types';
-import { toySuite } from './toy-suite';
+import { toySuite1 } from './toy-suite-1';
 import { codefixSuite } from './codefix-suite';
 
 export function loadSuite(name: string): Scenario[] {
   if (name === "toy") {
-    return toySuite;
+    return toySuite1;
   }
   if (name === "codefix-toy") {
     return codefixSuite;
