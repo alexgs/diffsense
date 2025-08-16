@@ -1,4 +1,4 @@
-import type { ModelId, ScenarioId } from "./ids";
+import type { ModelId, ScenarioId } from "./ids.js";
 
 /** Evaluator contracts */
 export interface EvaluationContext<I = unknown, E = unknown> {

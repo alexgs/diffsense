@@ -1,1 +1,1 @@
-export * from "./load-suite";
+export * from "./load-suite.js";

@@ -1,1 +1,1 @@
-export * from "./exact-match";
+export * from "./exact-match.js";

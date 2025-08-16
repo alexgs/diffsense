@@ -5,8 +5,8 @@ import type {
   RunnerResult as NewRunnerResult,
   Scenario as NewScenario,
   Score as NewScore,
-} from "./contracts";
-import type { ScenarioId } from "./ids";
+} from "./contracts.js";
+import type { ScenarioId } from "./ids.js";
 
 /* ============================================================
    Legacy type names — now prefixed to avoid export collisions.

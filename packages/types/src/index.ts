@@ -1,7 +1,7 @@
 // Canonical, new contracts
-export * from "./ids";
-export * from "./contracts";
-export * from "./codefix";
+export * from "./ids.js";
+export * from "./contracts.js";
+export * from "./codefix.js";
 
 // Legacy names + adapters (temporary during migration)
-export * from "./legacy-compatibility";
+export * from "./legacy-compatibility.js";

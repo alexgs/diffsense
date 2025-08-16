@@ -1,6 +1,6 @@
 import { loadSuite } from "@diffsense/test-suites";
 import type { Scenario, Score } from "@diffsense/types";
-import type { RunSuiteOptions, ScenarioRunResult, SuiteRunResult } from './types';
+import type { RunSuiteOptions, ScenarioRunResult, SuiteRunResult } from './types.js';
 
 /** Normalize a Score | Score[] into a flat array. */
 function toScoreArray(s: Score | Score[]): Score[] {

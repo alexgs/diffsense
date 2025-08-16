@@ -1,5 +1,5 @@
-import type { Scenario } from "./contracts";
-import type { ScenarioId } from "./ids";
+import type { Scenario } from "./contracts.js";
+import type { ScenarioId } from "./ids.js";
 
 /** Your original pieces, now grouped as the Scenario.input payload. */
 export type CodefixConstraints = {
