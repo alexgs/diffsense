@@ -1,40 +1,45 @@
-import "dotenv/config";
 import { runSuite } from "@diffsense/harness";
+import { StubRunner } from "@diffsense/runners";
+import { exactMatch } from "@diffsense/evaluators";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 
-function parseArg(flag: string, fallback?: string): string | undefined {
-  const idx = process.argv.indexOf(flag);
-  if (idx !== -1 && idx + 1 < process.argv.length) return process.argv[idx + 1];
-  return fallback;
+function parseArgs(argv: string[]) {
+  const args = { suite: "toy", out: "", json: false };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--suite" && argv[i + 1]) args.suite = argv[++i];
+    else if (a === "--out" && argv[i + 1]) args.out = argv[++i];
+    else if (a === "--json") args.json = true;
+  }
+  return args;
 }
 
-async function main() {
-  const suite = parseArg("--suite", "toy");
-  const runner = parseArg("--runner", "mock:echo");
-  const out = parseArg("--out");
+(async () => {
+  const { suite, out, json } = parseArgs(process.argv.slice(2));
 
-  if (!suite || !runner) {
-    console.error("Usage: diffsense --suite toy --runner mock:echo [--out results.json]");
-    process.exit(2);
+  const res = await runSuite({
+    suiteIdOrPath: suite,
+    runner: StubRunner,
+    evaluator: exactMatch
+  });
+
+  const outJson = JSON.stringify(res, null, 2);
+
+  if (out) {
+    const dir = resolve(process.cwd(), out);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(resolve(dir, "results.json"), outJson, "utf8");
+    console.log(`Wrote ${resolve(dir, "results.json")}`);
   }
 
-  try {
-    const result = await runSuite({ suite, runnerName: runner });
-    const json = JSON.stringify(result, null, 2);
-    if (out) {
-      const fs = await import("node:fs/promises");
-      await fs.writeFile(out, json, "utf8");
-      console.log(`Wrote ${out}`);
-    } else {
-      console.log(json);
-    }
-  } catch (err: any) {
-    console.error("Error:", err?.message ?? err);
-    process.exit(1);
+  if (!out || json) {
+    console.log(outJson);
   }
-}
 
-if (process.argv[1] && import.meta.url.endsWith(process.argv[1])) {
-  // tsx direct run
-}
-
-void main();
+  // Exit code: nonzero if any scenario failed
+  process.exit(res.summary.failed > 0 ? 1 : 0);
+})().catch(err => {
+  console.error(err);
+  process.exit(2);
+});

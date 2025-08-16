@@ -1,16 +1,15 @@
-import { LegacyEvaluation, LegacyEvaluator, LegacyScenario } from '@diffsense/types';
+import type { Evaluator } from "@diffsense/types";
 
-export const exactMatchEvaluator: LegacyEvaluator = {
-  key: "exact-match",
-  evaluate(scenario: LegacyScenario, output: string): LegacyEvaluation {
-    const actual = (output ?? "").trim();
-    const expected = (scenario.expected ?? "").trim();
-    const pass = actual === expected;
+export const exactMatch: Evaluator = {
+  async evaluate({ scenario, outputText }) {
+    const expected = String(scenario.expected ?? "").trim();
+    const received = String(outputText ?? "").trim();
+    const pass = received === expected;
     return {
-      evaluator: this.key,
+      key: "exact_match",
+      value: pass ? 1 : 0,
       pass,
-      score: pass ? 1 : 0,
-      details: pass ? undefined : { expected, got: actual },
+      details: pass ? undefined : { expected, received },
     };
-  },
+  }
 };

@@ -52,3 +52,9 @@ export interface Scenario<I = unknown, E = unknown> {
   metadata?: Record<string, unknown>;
 }
 
+// Group of scenarios, used by loaders & harness
+export interface Suite<I = unknown, E = unknown> {
+  id: string;
+  name: string;
+  scenarios: Array<Scenario<I, E>>;
+}
