@@ -28,9 +28,10 @@
     "npm": "11.5.2"
   },
   "dependencies": {
-    "@diffsense/types": "*",
     "@diffsense/evaluators": "*",
     "@diffsense/harness": "*",
-    "@diffsense/runners": "*"
+    "@diffsense/runners": "*",
+    "@diffsense/types": "*",
+    "commander": "^14.0.0"
   }
 }

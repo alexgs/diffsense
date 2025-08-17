@@ -11,41 +11,46 @@ evaluateOutput(output: string, evaluator: Evaluator): number
 ```  
 - **Decisions:**
   - Store shared types in `@diffsense/types`
-  - Use `@diffsense/scenarios` for suite definitions
+  - Use `@diffsense/test-suites` for suite definitions
 
 ## Full Project Summary
 
 ### 1. Project Overview
 
 - DiffSense is a modular benchmark tool for evaluating LLMs on real-world software engineering tasks.  
-- Core packages: `types`, `harness`, `evaluators`, `runners`, `cli`.
+- Core packages: 
+  - `cli`
+  - `evaluators` 
+  - `harness`
+  - `runners` 
+  - `types`
 
 ### 2. Key APIs
 
 ```ts
-function runScenario(suite: TestSuite): ScenarioResult
-function evaluateOutput(output: string, evaluator: Evaluator): number
+function runSuite(opts: RunSuiteOptions): Promise<SuiteRunResult>
 ```
 
 ### 3. Architecture Decisions
 
 - Store shared types in `@diffsense/types`
-- Use `@diffsense/scenarios` for suite definitions
+- Use `@diffsense/test-suites` for suite definitions
 - Evaluators are pluggable via config, not hardcoded in harness
 
 ### 4. Current Goal
 
-Implement toy scenario runner with hardcoded evaluator for First Pulse milestone.
+Add CLI flag to select which scenario to run.
 
 ### 5. Current Zoom Level
 
-- **Close Up** -> Types — add just enough structure for Scenario, Runner, Evaluator.
+- **Close Up** -> Add CLI flag to select which scenario to run.
 
 ### 6. Open Questions / TODOs
 
 ### 7. Last Checkpoint Summary
 
-- Added `@diffsense/scenarios` package with toy test suite; CLI can now run it through harness and print raw result.
+- CLI runs hardcoded test suite with toy scenario.
+- Added `@diffsense/test-suites` package with toy test suite; CLI can now run it through harness and print raw result.
 
 ### How to use this with ChatGPT
 
