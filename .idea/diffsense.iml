@@ -6,6 +6,13 @@
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/packages/test-suites/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/cli/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/evaluators/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/harness/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/runners/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/test-suites/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/types/.turbo" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

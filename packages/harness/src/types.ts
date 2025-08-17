@@ -1,12 +1,5 @@
 import type { Evaluator, Runner, Scenario } from '@diffsense/types';
 
-export interface RunSuiteOptions {
-  suiteIdOrPath: string;
-  runner: Runner;
-  evaluator: Evaluator;
-  // later: config, concurrency, timeouts, etc.
-}
-
 export interface ScenarioRunResult {
   scenarioId: string;
   outputText: string;

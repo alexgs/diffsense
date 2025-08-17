@@ -38,6 +38,17 @@ export interface RunnerResult {
   raw?: unknown;
 }
 
+export interface RunSuiteOptions {
+  suiteIdOrPath: string;
+  runner: Runner;
+  evaluator: Evaluator;
+
+  // Optional allow-list of scenario filters (IDs, substrings, or /regex/).
+  scenarioFilters?: string[];
+
+  // later: config, concurrency, timeouts, etc.
+}
+
 /** Scenario contract (minimal and generic) */
 export interface Scenario<I = unknown, E = unknown> {
   id: ScenarioId;

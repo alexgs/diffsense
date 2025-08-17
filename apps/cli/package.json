@@ -16,10 +16,10 @@
     "url": "git+https://github.com/alexgs/diffsense.git"
   },
   "scripts": {
-    "dev": "tsx src/index.ts",
-    "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
+    "build": "tsc -b",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -28,9 +28,10 @@
     "npm": "11.5.2"
   },
   "dependencies": {
-    "@diffsense/types": "*",
     "@diffsense/evaluators": "*",
     "@diffsense/harness": "*",
-    "@diffsense/runners": "*"
+    "@diffsense/runners": "*",
+    "@diffsense/types": "*",
+    "commander": "^14.0.0"
   }
 }

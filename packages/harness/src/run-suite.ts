@@ -1,6 +1,13 @@
 import { loadSuite } from "@diffsense/test-suites";
-import type { Scenario, Score } from "@diffsense/types";
-import type { RunSuiteOptions, ScenarioRunResult, SuiteRunResult } from './types.js';
+import type { RunSuiteOptions, Scenario, Score } from "@diffsense/types";
+import type { ScenarioRunResult, SuiteRunResult } from './types.js';
+
+function matchesFilter(filter: string, id: string): boolean {
+  if (filter.startsWith('/') && filter.endsWith('/')) {
+    return new RegExp(filter.slice(1, -1)).test(id);
+  }
+  return id === filter || id.toLowerCase().includes(filter.toLowerCase());
+}
 
 /** Normalize a Score | Score[] into a flat array. */
 function toScoreArray(s: Score | Score[]): Score[] {
@@ -12,7 +19,21 @@ function toScoreArray(s: Score | Score[]): Score[] {
  * evaluate the output, and collect results.
  */
 export async function runSuite(opts: RunSuiteOptions): Promise<SuiteRunResult> {
-  const suite = await loadSuite(opts.suiteIdOrPath);
+  const { suiteIdOrPath, runner, evaluator, scenarioFilters } = opts;
+
+  const suite = await loadSuite(suiteIdOrPath); // whatever you already do
+
+  const scenarios = scenarioFilters?.length
+    ? suite.scenarios.filter(s =>
+      scenarioFilters.some(f => matchesFilter(f, s.id))
+    )
+    : suite.scenarios;
+
+  if (!scenarios.length) {
+    throw new Error(
+      `No scenarios matched filters: ${scenarioFilters?.join(', ')}`
+    );
+  }
 
   const results: ScenarioRunResult[] = [];
   for (const scn of suite.scenarios as Scenario[]) {
