@@ -36,7 +36,7 @@ export async function runSuite(opts: RunSuiteOptions): Promise<SuiteRunResult> {
   }
 
   const results: ScenarioRunResult[] = [];
-  for (const scn of suite.scenarios as Scenario[]) {
+  for (const scn of scenarios as Scenario[]) {
     // 1) Run the prompt through the runner
     const rr = await opts.runner.run(scn.prompt);
 
