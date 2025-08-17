@@ -1,0 +1,56 @@
+name: unit-tests
+
+on:
+  pull_request:
+    branches: [ develop ]
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      - name: Build all (Turbo)
+        run: npm run build
+
+  test:
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        pkg:
+          # intentionally skipping @diffsense/cli
+          - { name: '@diffsense/types',       path: 'packages/types' }
+          - { name: '@diffsense/evaluators',  path: 'packages/evaluators' }
+          - { name: '@diffsense/runners',     path: 'packages/runners' }
+          - { name: '@diffsense/harness',     path: 'packages/harness' }
+          - { name: '@diffsense/test-suites', path: 'packages/test-suites' }
+    name: ${{ matrix.pkg.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      - name: Build all (Turbo)
+        run: npm run build
+      - name: Run tests
+        run: npm run -w ${{ matrix.pkg.name }} test --if-present
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.pkg.name }}
+          path: ${{ matrix.pkg.path }}/coverage/**

@@ -9,7 +9,6 @@
   "exports": { ".": "./dist/index.js" },
   "license": "BSD-3-Clause",
   "main": "dist/index.js",
-  "packageManager": "npm@11.1.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -17,7 +16,9 @@
   },
   "scripts": {
     "build": "tsc -b",
+    "coverage": "vitest run --coverage",
     "dev": "tsc -b -w",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "type": "module",

@@ -2,11 +2,22 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "tsconfig.tsbuildinfo"]
+      "outputs": [
+        "dist/**",
+        "tsconfig.tsbuildinfo"
+      ]
+    },
+    "coverage": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
     },
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "test": {
+      "dependsOn": [],
+      "outputs": []
     }
   }
 }
