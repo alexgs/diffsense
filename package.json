@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run build && turbo run dev"
+    "build:watch": "turbo run build --filter='./packages/*' && turbo run dev --filter='./packages/*'",
+    "cli": "npm -w @diffsense/cli run start"
   },
   "volta": {
     "node": "22.18.0",
