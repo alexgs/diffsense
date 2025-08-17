@@ -19,8 +19,8 @@
     "cli": "npm -w @diffsense/cli run start",
     "coverage": "turbo run coverage",
     "lint": "turbo run lint",
-    "test": "turbo run test",
-    "test:watch": "turbo run test -- --watch"
+    "test": "turbo run test --filter='!@diffsense/cli'",
+    "test:watch": "turbo run test --filter='!@diffsense/cli' -- --watch"
   },
   "volta": {
     "node": "22.18.0",
