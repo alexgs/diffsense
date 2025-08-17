@@ -1,0 +1,32 @@
+import type { Scenario } from "./contracts.js";
+import type { ScenarioId } from "./ids.js";
+
+/** Your original pieces, now grouped as the Scenario.input payload. */
+export type CodefixConstraints = {
+  /** If present, patch.find MUST be one of these. */
+  allowedFinds?: string[];
+};
+
+/** Input payload for a Codefix scenario. */
+export interface CodefixInput {
+  kind: "codefix";        // keeps your discriminator
+  source: string;         // buggy code
+  entry: "add";           // function name to test (feel free to widen later)
+  tests: CodefixTest[];   // tiny truth table
+  constraints?: CodefixConstraints;
+}
+
+/** The canonical Codefix scenario in the new contract. */
+export type CodefixScenario = Scenario<CodefixInput, string>;
+
+export type CodefixTest = { args: [number, number]; expect: number };
+
+/** Helper to brand IDs when you make scenarios. */
+export const makeCodefixScenario = (s: {
+  id: ScenarioId;
+  name: string;
+  prompt: string;
+  input: CodefixInput;
+  expected?: string;
+  metadata?: Record<string, unknown>;
+}): CodefixScenario => s;

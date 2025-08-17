@@ -1,2 +1,1 @@
-export * from "./exact-match";
-export * from "./codefix";
+export * from "./exact-match.js";

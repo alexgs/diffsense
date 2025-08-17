@@ -9,6 +9,7 @@
     "diffsense": "dist/index.js"
   },
   "license": "BSD-3-Clause",
+  "main": "./dist/index.js",
   "private": true,
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
     "test": "vitest run"
   },
   "type": "module",
+  "types": "./dist/index.d.ts",
   "volta": {
     "node": "22.18.0",
     "npm": "11.5.2"

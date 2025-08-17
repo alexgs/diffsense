@@ -1,1 +1,1 @@
-export * from "./run-suite";
+export * from "./run-suite.js";

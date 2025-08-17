@@ -1,9 +1,28 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist",
+    // Emit settings
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "noEmit": false,
+    "noEmitOnError": true,
+
+    // Module/target
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "resolvePackageJsonExports": true,
+
+    // Type-checking
+    "strict": true,
+    "skipLibCheck": true,
+
+    // Ensure we DO NOT pull in root path aliases
+    "baseUrl": ".",
+    "paths": {}
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist", "**/*.test.ts", "**/__tests__/**"]
 }
