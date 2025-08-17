@@ -7,38 +7,50 @@ on:
     branches: [ develop, 'feature/ds-14-unit-tests' ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
-
       - name: Install deps
         run: npm ci
-
-      - name: Build
+      - name: Build all (Turbo)
         run: npm run build
 
+  test:
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        pkg:
+          # intentionally skipping @diffsense/cli
+          - { name: '@diffsense/types',       path: 'packages/types' }
+          - { name: '@diffsense/evaluators',  path: 'packages/evaluators' }
+          - { name: '@diffsense/runners',     path: 'packages/runners' }
+          - { name: '@diffsense/harness',     path: 'packages/harness' }
+          - { name: '@diffsense/test-suites', path: 'packages/test-suites' }
+    name: unit tests • ${{ matrix.pkg.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      - name: Build all (Turbo)
+        run: npm run build
       - name: Run tests
-        run: npm test
-
-      # Optional: fail PR on changed lockfile formatting, etc.
-#      - name: Verify workspace
-#        run: npm ls --workspaces
-
-      # Optional: coverage artifact
-#      - name: Upload coverage
-#        if: always()
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: coverage
-#          path: |
-#            **/coverage/**
+        run: npm run -w ${{ matrix.pkg.name }} test --if-present
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.pkg.name }}
+          path: ${{ matrix.pkg.path }}/coverage/**
