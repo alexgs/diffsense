@@ -35,7 +35,7 @@ jobs:
           - { name: '@diffsense/runners',     path: 'packages/runners' }
           - { name: '@diffsense/harness',     path: 'packages/harness' }
           - { name: '@diffsense/test-suites', path: 'packages/test-suites' }
-    name: unit tests • ${{ matrix.pkg.name }}
+    name: ${{ matrix.pkg.name }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
