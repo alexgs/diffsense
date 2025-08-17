@@ -16,10 +16,11 @@
     "url": "git+https://github.com/alexgs/diffsense.git"
   },
   "scripts": {
-    "dev": "tsx src/index.ts",
-    "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
+    "build": "tsc -b",
+    "dev": "nodemon -w dist -w ../harness/dist -w ../types/dist -x node dist/index.js",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "type": "module",
   "types": "./dist/index.d.ts",

@@ -9,8 +9,9 @@
   },
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "build": "tsc -b",
+    "dev": "tsc -b -w",
+    "typecheck": "tsc --noEmit"
   },
   "type": "module",
   "types": "./dist/index.d.ts",

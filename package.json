@@ -7,12 +7,16 @@
     "name": "Alex Gates-Shannon"
   },
   "license": "BSD-3-Clause",
+  "packageManager": "npm@11.5.2",
   "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alexgs/diffsense.git"
   },
-  "scripts": {},
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run build && turbo run dev"
+  },
   "volta": {
     "node": "22.18.0",
     "npm": "11.5.2"
@@ -21,10 +25,11 @@
     "apps/*",
     "packages/*"
   ],
-  "dependencies": {},
   "devDependencies": {
     "@types/node": "^24.2.1",
+    "nodemon": "^3.1.10",
     "tsx": "^4.20.3",
+    "turbo": "^2.5.6",
     "typescript": "^5.9.2"
   }
 }
