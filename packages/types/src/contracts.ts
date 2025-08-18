@@ -1,6 +1,7 @@
 import type { ModelId, ScenarioId } from "./ids.js";
 
-/** Evaluator contracts */
+// --- EVALUATOR CONTRACTS ---
+
 export interface EvaluationContext<I = unknown, E = unknown> {
   scenario: Scenario<I, E>;
   input: I;
@@ -20,7 +21,8 @@ export interface Score {
 
 export type ScoreValue = number;
 
-/** Runner contracts */
+// --- RUNNER CONTRACTS ---
+
 export interface Runner {
   run(prompt: string, options?: RunnerOptions): Promise<RunnerResult>;
 }
@@ -49,7 +51,9 @@ export interface RunSuiteOptions {
   // later: config, concurrency, timeouts, etc.
 }
 
-/** Scenario contract (minimal and generic) */
+// --- SCENARIO CONTRACTS ---
+
+// Minimal and generic scenario
 export interface Scenario<I = unknown, E = unknown> {
   id: ScenarioId;
   name: string;
@@ -63,9 +67,41 @@ export interface Scenario<I = unknown, E = unknown> {
   metadata?: Record<string, unknown>;
 }
 
+export type ScenarioLike = Scenario<unknown, unknown>;
+
+export interface ScenarioRunResult {
+  scenarioId: string;
+  outputText: string;
+  scores: Array<{
+    key: string;
+    value: number;
+    pass: boolean;
+    details?: unknown;
+  }>;
+  pass: boolean; // aggregate: true iff all scores pass
+  model?: string;
+  latencyMs?: number;
+  tokens?: number;
+}
+
+// --- SUITE CONTRACTS ---
+
 // Group of scenarios, used by loaders & harness
 export interface Suite<I = unknown, E = unknown> {
   id: string;
   name: string;
   scenarios: Array<Scenario<I, E>>;
+}
+
+export interface SuiteRunResult {
+  suiteId: string;
+  results: ScenarioRunResult[];
+  summary: SuiteSummary;
+  metadata?: Record<string, unknown>;
+}
+
+export interface SuiteSummary {
+  total: number;
+  passed: number;
+  failed: number;
 }
