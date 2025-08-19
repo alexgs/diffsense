@@ -1,7 +1,7 @@
 {
   "baseBranch": "main",
   "changelog": "@changesets/cli/changelog",
-  "commit": true,
+  "commit": false,
   "fixed": [
     ["@diffsense/*"]
   ],

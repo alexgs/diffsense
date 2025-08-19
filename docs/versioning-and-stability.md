@@ -2,8 +2,6 @@
 
 **Goals:** predictable releases, easy bisecting, clear expectations for contributors and users.
 
----
-
 ## Versioning model
 
 * **Lockstep SemVer across all `@diffsense/*` packages.** One version for the whole suite.
@@ -112,12 +110,12 @@ Scripts in root `package.json`:
 
 ```bash
 npx changeset                # create a bump entry
-npm run version && npm run release
+npm run version
 
 # Betas
 npm run prerelease:enter
 # …land changesets…
-npm run version && npm run release
+npm run version
 npm run prerelease:exit
 ```
 

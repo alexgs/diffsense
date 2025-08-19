@@ -36,6 +36,7 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@changesets/cli": "^2.29.6",
     "@types/node": "^24.2.1",
     "@vitest/coverage-v8": "^3.2.4",
     "nodemon": "^3.1.10",
