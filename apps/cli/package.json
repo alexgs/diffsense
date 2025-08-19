@@ -1,6 +1,6 @@
 {
   "name": "@diffsense/cli",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": {
     "email": "alex.nebula99@gmail.com",
     "name": "Alex Gates-Shannon"
@@ -19,6 +19,7 @@
     "build": "tsc -b",
     "start": "node dist/index.js",
     "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "type": "module",
