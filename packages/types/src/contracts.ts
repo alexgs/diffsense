@@ -12,16 +12,19 @@ export type ManifestFormatVersion = typeof MANIFEST_FORMAT_VERSION;
 
 // --- EVALUATOR CONTRACTS ---
 
+/** @stability stable */
 export interface EvaluationContext<I = unknown, E = unknown> {
   scenario: Scenario<I, E>;
   input: I;
   outputText: string;
 }
 
+/** @stability stable */
 export interface Evaluator<I = unknown, E = unknown> {
   evaluate(ctx: EvaluationContext<I, E>): Promise<Score | Score[]>;
 }
 
+/** @stability stable */
 export interface Score {
   key: string;     // e.g. "exact_match"
   value: ScoreValue;
@@ -29,19 +32,23 @@ export interface Score {
   details?: unknown;
 }
 
+/** @stability stable */
 export type ScoreValue = number;
 
 // --- RUNNER CONTRACTS ---
 
+/** @stability stable */
 export interface Runner {
   run(prompt: string, options?: RunnerOptions): Promise<RunnerResult>;
 }
 
+/** @stability stable */
 export interface RunnerOptions {
   timeoutMs?: number;
   [k: string]: unknown;
 }
 
+/** @stability stable */
 export interface RunnerResult {
   outputText: string;
   model: ModelId;
@@ -50,6 +57,7 @@ export interface RunnerResult {
   raw?: unknown;
 }
 
+/** @stability experimental */
 export interface RunSuiteOptions {
   suiteIdOrPath: string;
   runner: Runner;
@@ -64,6 +72,7 @@ export interface RunSuiteOptions {
 // --- SCENARIO CONTRACTS ---
 
 // Minimal and generic scenario
+/** @stability stable */
 export interface Scenario<I = unknown, E = unknown> {
   id: ScenarioId;
   name: string;
@@ -77,8 +86,10 @@ export interface Scenario<I = unknown, E = unknown> {
   metadata?: Record<string, unknown>;
 }
 
+/** @stability stable */
 export type ScenarioLike = Scenario<unknown, unknown>;
 
+/** @stability stable */
 export interface ScenarioRunResult {
   scenarioId: string;
   outputText: string;
@@ -97,12 +108,14 @@ export interface ScenarioRunResult {
 // --- SUITE CONTRACTS ---
 
 // Group of scenarios, used by loaders & harness
+/** @stability stable */
 export interface Suite<I = unknown, E = unknown> {
   id: string;
   name: string;
   scenarios: Array<Scenario<I, E>>;
 }
 
+/** @stability stable */
 export interface SuiteRunResult {
   /** Version of the results.json schema. Bump when breaking the JSON shape. */
   schemaVersion: ResultsSchemaVersion;
@@ -113,6 +126,7 @@ export interface SuiteRunResult {
   metadata?: Record<string, unknown>;
 }
 
+/** @stability stable */
 export interface SuiteSummary {
   total: number;
   passed: number;
