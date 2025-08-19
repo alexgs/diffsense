@@ -9,6 +9,8 @@ import { resolveRunsRoot, createRunDir } from './run-paths.js';
 import { writeJson, writeText, symlinkLatest } from './file-system-utils.js';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { createRequire } from 'node:module';
+import { promises as fs } from 'node:fs';
 
 type CliOptions = {
   suite: string;
@@ -114,24 +116,49 @@ async function main() {
   await writeText(path.join(runDir, 'stdout.log'), 'Run finished\n' + doneLine);
 }
 
-async function collectVersions() {
-  // Light-touch version reporting; expand as needed
-  const load = (name: string) => {
+const req = typeof require === 'function' ? require : createRequire(import.meta.url);
+
+async function readNearestPackageJson(startFile: string) {
+  let dir = path.dirname(startFile);
+  for (let i = 0; i < 10; i++) {
+    const pj = path.join(dir, 'package.json');
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      return require(`${name}/package.json`).version as string;
-    } catch {
-      return null;
+      const txt = await fs.readFile(pj, 'utf8');
+      return { json: JSON.parse(txt), path: pj };
+    } catch { /* keep walking */ }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return null;
+}
+
+async function getPackageVersion(pkgName: string): Promise<string | null> {
+  try {
+    // Resolve the package’s entrypoint (respects exports)
+    const entry = req.resolve(pkgName);
+    const pkg = await readNearestPackageJson(entry);
+    if (pkg?.json?.name === pkgName && typeof pkg.json.version === 'string') {
+      return pkg.json.version;
     }
-  };
-  return {
-    node: process.version,
-    '@diffsense/cli': load('@diffsense/cli'),
-    '@diffsense/harness': load('@diffsense/harness'),
-    '@diffsense/runners': load('@diffsense/runners'),
-    '@diffsense/evaluators': load('@diffsense/evaluators'),
-    '@diffsense/types': load('@diffsense/types'),
-  };
+  } catch { /* fall through */ }
+  return null;
+}
+
+export async function collectVersions() {
+  const names = [
+    '@diffsense/cli',
+    '@diffsense/harness',
+    '@diffsense/runners',
+    '@diffsense/evaluators',
+    '@diffsense/types',
+  ] as const;
+
+  const entries = await Promise.all(names.map(async (n) => [n, await getPackageVersion(n)] as const));
+  return Object.fromEntries([
+    ['node', process.version],
+    ...entries,
+  ]) as Record<string, string | null>;
 }
 
 main().catch((err) => {
