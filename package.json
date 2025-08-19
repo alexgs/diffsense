@@ -22,7 +22,7 @@
     "lint": "turbo run lint",
     "prerelease:enter": "changeset pre enter beta",
     "prerelease:exit": "changeset pre exit",
-    "tag": "changeset tag",
+    "tag": "node -e \"const v=require('./apps/cli/package.json').version; console.log('v'+v)\" | xargs -I {} git tag -a {} -m \"Release {}\" && git push origin \"$(node -p \"'v'+require('./apps/cli/package.json').version\")\"",
     "test": "turbo run test --filter='!@diffsense/cli'",
     "test:watch": "turbo run test --filter='!@diffsense/cli' -- --watch",
     "version": "changeset version && npm run build"
