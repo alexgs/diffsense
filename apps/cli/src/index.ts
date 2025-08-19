@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { runSuite } from '@diffsense/harness';
-import type { RunSuiteOptions, SuiteRunResult } from '@diffsense/types';
+import {
+  MANIFEST_FORMAT_VERSION,
+  RunSuiteOptions,
+  SuiteRunResult,
+} from '@diffsense/types';
 import { resolveRunner } from './resolve-runner.js';
 import { resolveEvaluator } from './resolve-evaluator.js';
 import { resolveSuiteForSnapshot } from './resolve-suite.js';
@@ -84,6 +88,7 @@ async function main() {
   // Manifest for quick scanning / reproducibility
   const manifest = {
     id: dirName,
+    formatVersion: MANIFEST_FORMAT_VERSION,
     createdAt: new Date().toISOString(),
     suite: {
       requestedId: opts.suite,

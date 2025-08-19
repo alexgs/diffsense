@@ -1,5 +1,15 @@
 import type { ModelId, ScenarioId } from "./ids.js";
 
+// --- SCHEMA VERSIONS ---
+
+/** Current JSON schema version for results artifacts written to runs/<stamp>. */
+export const RESULTS_SCHEMA_VERSION = 1 as const;
+export type ResultsSchemaVersion = typeof RESULTS_SCHEMA_VERSION;
+
+/** Current JSON format version for CLI manifest (runs/<stamp>/manifest.json). */
+export const MANIFEST_FORMAT_VERSION = 1 as const;
+export type ManifestFormatVersion = typeof MANIFEST_FORMAT_VERSION;
+
 // --- EVALUATOR CONTRACTS ---
 
 export interface EvaluationContext<I = unknown, E = unknown> {
@@ -94,6 +104,9 @@ export interface Suite<I = unknown, E = unknown> {
 }
 
 export interface SuiteRunResult {
+  /** Version of the results.json schema. Bump when breaking the JSON shape. */
+  schemaVersion: ResultsSchemaVersion;
+
   suiteId: string;
   results: ScenarioRunResult[];
   summary: SuiteSummary;

@@ -1,0 +1,10 @@
+{
+  "baseBranch": "main",
+  "changelog": "@changesets/cli/changelog",
+  "commit": true,
+  "fixed": [
+    ["@diffsense/*"]
+  ],
+  "privatePackages": { "version": true, "tag": true },
+  "updateInternalDependencies": "patch"
+}

@@ -16,11 +16,16 @@
   "scripts": {
     "build": "turbo run build",
     "build:watch": "turbo run build --filter='./packages/*' && turbo run dev --filter='./packages/*'",
+    "changeset": "changeset",
     "cli": "npm -w @diffsense/cli run start",
     "coverage": "turbo run coverage",
     "lint": "turbo run lint",
+    "prerelease:enter": "changeset pre enter beta",
+    "prerelease:exit": "changeset pre exit",
+    "tag": "changeset tag",
     "test": "turbo run test --filter='!@diffsense/cli'",
-    "test:watch": "turbo run test --filter='!@diffsense/cli' -- --watch"
+    "test:watch": "turbo run test --filter='!@diffsense/cli' -- --watch",
+    "version": "changeset version && npm run build"
   },
   "volta": {
     "node": "22.18.0",

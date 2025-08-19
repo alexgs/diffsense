@@ -1,11 +1,12 @@
 import { loadSuite } from "@diffsense/test-suites";
-import type {
+import {
+  RESULTS_SCHEMA_VERSION,
   RunSuiteOptions,
   Scenario,
   ScenarioRunResult,
   Score,
   SuiteRunResult,
-} from "@diffsense/types";
+} from '@diffsense/types';
 
 function matchesFilter(filter: string, id: string): boolean {
   if (filter.startsWith('/') && filter.endsWith('/')) {
@@ -80,6 +81,7 @@ export async function runSuite(opts: RunSuiteOptions): Promise<SuiteRunResult> {
   };
 
   return {
+    schemaVersion: RESULTS_SCHEMA_VERSION,
     suiteId: suite.id,
     results,
     summary,
