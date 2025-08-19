@@ -1,12 +1,14 @@
 {
   "name": "@diffsense/types",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Core types for the DiffSense benchmark",
   "author": {
     "email": "alex.nebula99@gmail.com",
     "name": "Alex Gates-Shannon"
   },
-  "exports": { ".": "./dist/index.js" },
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "license": "BSD-3-Clause",
   "main": "dist/index.js",
   "private": true,
