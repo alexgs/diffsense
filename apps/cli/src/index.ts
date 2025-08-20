@@ -15,6 +15,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { promises as fs } from 'node:fs';
+import { printQuickVerdict } from './printers/quick-verdict.js';
 
 type CliOptions = {
   suite: string;
@@ -116,9 +117,15 @@ async function main() {
   await symlinkLatest(latestPath, dirName);
 
   // Mirror a simple completion line to stdout and log
-  const doneLine = `Saved time capsule: ${path.relative(process.cwd(), runDir)}\n`;
-  process.stdout.write(doneLine);
-  await writeText(path.join(runDir, 'stdout.log'), 'Run finished\n' + doneLine);
+  // const doneLine = `Saved time capsule: ${path.relative(process.cwd(), runDir)}\n`;
+  // process.stdout.write(doneLine);
+  // await writeText(path.join(runDir, 'stdout.log'), 'Run finished\n' + doneLine);
+
+  // Print Quick Verdict to console
+  printQuickVerdict(result);
+
+  // Set exit code for CI/IDE tasks
+  process.exitCode = result.summary.failed > 0 ? 1 : 0;
 }
 
 const req = typeof require === 'function' ? require : createRequire(import.meta.url);
